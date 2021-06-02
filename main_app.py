@@ -20,16 +20,21 @@ class MainApp(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         # self.cam_front.setCamera("rtsp://192.168.1.103:8554/live")
         # self.cam_front.setCamera(0)
 
+        # Stream Front
+        # ====================================================================
         self.cam_front = CameraStream(self)
         self.cam_front.set_name_of_camera("front")
-        self.cam_front.setCamera("rtsp://admin:0R4150ml38u@192.168.1.64/live")
+        # self.cam_front.setCamera("rtsp://admin:0R4150ml38u@192.168.1.64/live")
+        self.cam_front.setCamera("rtsp://192.168.1.101:8554/live")
         # self.cam_front.setCamera("images\\face4.jpg")
         self.cam_front.changePixmap.connect(self.set_stream_cam_front)
         self.cam_front.start()
 
+        # Stream Side
+        # ====================================================================
         self.cam_side = CameraStream(self)
         self.cam_side.set_name_of_camera("side")
-        self.cam_side.setCamera("rtsp://admin:0R4150ml38u@192.168.1.64/live")
+        self.cam_side.setCamera("rtsp://192.168.1.101:8554/live")
         # self.cam_side.setCamera("images\\face4.jpg")
         self.cam_side.changePixmap.connect(self.set_stream_cam_side)
         self.cam_side.start()
@@ -76,7 +81,7 @@ class MainApp(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         results_front = image_obj_front.calculate_image()
         print(results_front)
 
-        self.imgCv = cv2.imread("results\\test.png")
+        self.imgCv = cv2.imread("results\\temp_front.png")
         self.imgCv = cv2.resize(self.imgCv, (420,335))
         self.imgRGB = cv2.cvtColor(self.imgCv, cv2.COLOR_BGR2RGB)
         qimg = QtGui.QImage(self.imgRGB.data, self.imgRGB.shape[1],self.imgRGB.shape[0], QtGui.QImage.Format_RGB888)

@@ -25,7 +25,7 @@ class CameraStream(QThread):
                 h, w, ch = self.rgbImage.shape
                 bytesPerLine = ch * w
                 convertToQtFormat = QImage(self.rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
-                p = convertToQtFormat.scaled(580, 657)
+                p = convertToQtFormat.scaled(580, 657, Qt.KeepAspectRatio)
                 self.changePixmap.emit(p)
 
         # (Developing) Stream From Image
@@ -54,7 +54,7 @@ class CameraCapture(QThread):
         imgCv = cv2.resize(imgCv, (420,335))
         self.imgRGB = cv2.cvtColor(imgCv, cv2.COLOR_BGR2RGB)
         qimg = QtGui.QImage(self.imgRGB.data, self.imgRGB.shape[1],self.imgRGB.shape[0], QtGui.QImage.Format_RGB888)
-        p = qimg.scaled(580, 657)
+        p = qimg.scaled(580, 657, Qt.KeepAspectRatio)
         self.changePixmap.emit(p)
     
     def drawing_cam(self,num_cam, x, y):

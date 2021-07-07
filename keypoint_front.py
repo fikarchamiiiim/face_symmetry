@@ -2,8 +2,10 @@ import cv2
 import dlib
 import numpy as np
 from imutils import resize, face_utils
+import face_alignment
+from skimage import io
 
-class CalculateKeypoints:
+class CalculateKeypointsFront:
 
     MODEL_PATH = 'shape_predictor_68_face_landmarks.dat'
     CASCADE_PATH = "haarcascade_frontalface_default.xml"
@@ -87,3 +89,21 @@ class CalculateKeypoints:
         mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')  # Take the mask from BG
 
         return mask2, faces
+
+
+class CalculateKeypointsSide():
+    
+    def set_pic(self, image_file):
+        self.image = image_file
+
+    def calculate_image(self):
+        fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, flip_input=False)
+
+        image = io.imread(self.image)
+        preds = fa.get_landmarks(image)
+        image_color = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+        for i, coor in enumerate(preds[0]):
+            cv2.circle(image_color, tuple(coor), 1, (0, 255, 0), 1)
+        
+        cv2.imwrite("results\\temp_side.png",image_color)
